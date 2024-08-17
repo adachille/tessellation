@@ -1,9 +1,23 @@
 """Base class for tesselation generators."""
 
 from abc import ABC
+from enum import Enum, auto
 
 import numpy as np
 from skimage.segmentation import flood_fill
+
+
+class Action(Enum):
+    """Enum representing the possible actions for the generator."""
+
+    UP = auto()
+    UP_RIGHT = auto()
+    UP_LEFT = auto()
+    DOWN = auto()
+    DOWN_RIGHT = auto()
+    DOWN_LEFT = auto()
+    RIGHT = auto()
+    LEFT = auto()
 
 
 class Generator(ABC):
@@ -39,6 +53,32 @@ class Generator(ABC):
                 tessellation[y_start:y_end, x_start:x_end] = color_mask
 
         return tessellation
+
+    @staticmethod
+    def _draw_line(
+        mask: np.ndarray,
+        start_point: tuple[int, int],  # (y, x)
+        action_list: list[Action],
+        should_flood_fill: bool = True,
+    ) -> np.ndarray:
+        """Draw a line on the mask."""
+        cursor = {"x": start_point[1], "y": start_point[0]}
+        mask[cursor["y"], cursor["x"]] = 1
+        for action in action_list:
+            if action in [Action.UP_LEFT, Action.UP_RIGHT, Action.UP]:
+                cursor["y"] -= 1
+            if action in [Action.DOWN_LEFT, Action.DOWN_RIGHT, Action.DOWN]:
+                cursor["y"] += 1
+            if action in [Action.UP_LEFT, Action.DOWN_LEFT, Action.LEFT]:
+                cursor["x"] -= 1
+            if action in [Action.UP_RIGHT, Action.DOWN_RIGHT, Action.RIGHT]:
+                cursor["x"] += 1
+
+            mask[cursor["y"], cursor["x"]] = 1
+            if should_flood_fill:
+                Generator._flood_fill(mask, (cursor["y"], cursor["x"]), 1)
+
+        return mask
 
     @staticmethod
     def _flood_fill(mask: np.ndarray, start_point: tuple[int, int], fill_value: int):

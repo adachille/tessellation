@@ -1,23 +1,16 @@
-from copy import deepcopy
-from enum import Enum, auto
 from typing import Optional
 
 import numpy as np
 
-from tessellation.procgen.generator import Generator
+from tessellation.procgen.generator import Action, Generator
 
-
-class Action(Enum):
-    """Enum representing the possible actions for the generator."""
-
-    UP = auto()
-    DOWN = auto()
-    UP_RIGHT = auto()
-    DOWN_RIGHT = auto()
-    RIGHT = auto()
-
-
-ACTIONS_LIST = np.array([action for action in Action])
+VALID_ACTIONS = [
+    Action.UP,
+    Action.UP_RIGHT,
+    Action.RIGHT,
+    Action.DOWN,
+    Action.DOWN_RIGHT,
+]
 
 
 class RNGGenerator(Generator):
@@ -29,33 +22,28 @@ class RNGGenerator(Generator):
     def generate(
         self,
         side_len: int,
-        action_list: Optional[list[Action]] = None,
         action_probs: Optional[list[Action]] = None,
     ) -> np.ndarray:
         """Generate a tesselation mask using a random number generator."""
-        if action_list is None:
-            action_list = ACTIONS_LIST
         if action_probs is None:
-            action_probs = [1 / len(action_list)] * len(action_list)
+            action_probs = [1 / len(VALID_ACTIONS)] * len(VALID_ACTIONS)
 
-        assert len(action_list) == len(action_probs)
+        assert len(VALID_ACTIONS) == len(action_probs)
 
-        y_mask = self._generate_side(side_len, action_list, action_probs)
-        x_mask = self._generate_side(side_len, action_list, action_probs).T
+        y_mask = self._generate_side(side_len, action_probs)
+        x_mask = self._generate_side(side_len, action_probs).T
         return x_mask | y_mask
 
-    def _generate_side(
-        self, side_len: int, actions_list: list, action_probs: list
-    ) -> np.ndarray:
-        mask = np.zeros((side_len, side_len), dtype=int)
+    def _generate_side(self, side_len: int, action_probs: list) -> np.ndarray:
         cursor = {"x": 0, "y": 0}
+        action_list = []
         while cursor["x"] < side_len - 1:
             action = self._get_rand_action(
-                actions_list=actions_list, action_probs=action_probs
+                actions_list=VALID_ACTIONS, action_probs=action_probs
             )
+            action_list.append(action)
             # Note: it's probably inefficient to call flood_fill on every step, but for
             # now, it's giving the most consistent results.
-            self._flood_fill(mask, (cursor["y"], cursor["x"]), 1)
             if action == Action.UP:
                 cursor["y"] -= 1
             elif action == Action.UP_RIGHT:
@@ -71,15 +59,11 @@ class RNGGenerator(Generator):
             else:
                 raise ValueError(f"Unsupported action: {action}")
 
-            if cursor["y"] >= 0:
-                mask[0 : cursor["y"], cursor["x"]] = 1
-            else:
-                mask[cursor["y"] :, cursor["x"]] = 1
-
-        return mask
+        mask = np.zeros((side_len, side_len), dtype=int)
+        return self._draw_line(mask, (0, 0), action_list)
 
     def _get_rand_action(
         self, actions_list: list[Action], action_probs: list[float]
-    ) -> int:
+    ) -> Action:
         """Choose a random action from the list of actions with the given probabilities."""
-        return self.rng.choice(actions_list, p=action_probs)
+        return self.rng.choice(np.array(actions_list), p=action_probs)

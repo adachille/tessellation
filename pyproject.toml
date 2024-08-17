@@ -11,10 +11,11 @@ repository = "https://github.com/adachille/tessellation"
 keywords = ["tessellation", "procedural content generation", "generative art"]
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.9"
 matplotlib = "^3.9.0"
 numpy = "^2.0.1"
-pillow = "^10.4.0"
+leap-ec = "^0.8.1"
+scikit-image = "^0.24.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"

@@ -1,3 +1,4 @@
+from copy import deepcopy
 from enum import Enum, auto
 from typing import Optional
 
@@ -52,6 +53,9 @@ class RNGGenerator(Generator):
             action = self._get_rand_action(
                 actions_list=actions_list, action_probs=action_probs
             )
+            # Note: it's probably inefficient to call flood_fill on every step, but for
+            # now, it's giving the most consistent results.
+            self._flood_fill(mask, (cursor["y"], cursor["x"]), 1)
             if action == Action.UP:
                 cursor["y"] -= 1
             elif action == Action.UP_RIGHT:

@@ -3,6 +3,7 @@
 from abc import ABC
 
 import numpy as np
+from skimage.segmentation import flood_fill
 
 
 class Generator(ABC):
@@ -38,3 +39,8 @@ class Generator(ABC):
                 tessellation[y_start:y_end, x_start:x_end] = color_mask
 
         return tessellation
+
+    @staticmethod
+    def _flood_fill(mask: np.ndarray, start_point: tuple[int, int], fill_value: int):
+        """Flood fill the 2d mask."""
+        return flood_fill(mask, start_point, fill_value)

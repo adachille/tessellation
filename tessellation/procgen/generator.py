@@ -1,21 +1,49 @@
 """Base class for tesselation generators."""
 
 from abc import ABC
+from enum import Enum, auto
 
 import numpy as np
-from skimage.segmentation import flood_fill
+
+
+# from skimage.segmentation import flood_fill
+
+
+class Action(Enum):
+    """Enum representing the possible actions for the generator."""
+
+    UP = auto()
+    UP_RIGHT = auto()
+    # UP_LEFT = auto()
+    DOWN = auto()
+    DOWN_RIGHT = auto()
+    # DOWN_LEFT = auto()
+    RIGHT = auto()
+    # LEFT = auto()
+
+
+ALL_ACTIONS = [action for action in Action]
+
+
+class GenerationResult:
+    def __init__(self, mask: np.ndarray, line_actions: list[list[Action]]):
+        self.mask = mask
+        self.line_actions = line_actions
 
 
 class Generator(ABC):
     """Base class for tesselation generators."""
 
-    def generate(self, *args, **kwargs) -> np.ndarray:
+    def generate(self, *args, **kwargs) -> GenerationResult:
         """Generate a new tesselation."""
         raise NotImplementedError
 
     @staticmethod
-    def tessellate(mask: np.ndarray, n_shapes: int = 5) -> np.ndarray:
+    def tessellate(
+        generation_result: GenerationResult, n_shapes: int = 5
+    ) -> np.ndarray:
         """Tessellate the mask n_shapes times."""
+        mask = generation_result.mask
         side_len = mask.shape[0]
         side_len_full_image = side_len * n_shapes
         tessellation = np.zeros((side_len_full_image, side_len_full_image), dtype=int)
@@ -41,6 +69,25 @@ class Generator(ABC):
         return tessellation
 
     @staticmethod
-    def _flood_fill(mask: np.ndarray, start_point: tuple[int, int], fill_value: int):
-        """Flood fill the 2d mask."""
-        return flood_fill(mask, start_point, fill_value)
+    def _draw_line(
+        mask: np.ndarray,
+        start_point: tuple[int, int],  # (y, x)
+        action_list: list[Action],
+    ) -> np.ndarray:
+        """Draw a line on the mask."""
+        cursor = {"x": start_point[1], "y": start_point[0]}
+        mask[cursor["y"], cursor["x"]] = 1
+        for action in action_list:
+            if cursor["y"] >= 0:
+                mask[0 : cursor["y"], cursor["x"]] = 1
+            else:
+                mask[cursor["y"] :, cursor["x"]] = 1
+
+            if action in [Action.UP_RIGHT, Action.UP]:
+                cursor["y"] -= 1
+            if action in [Action.DOWN_RIGHT, Action.DOWN]:
+                cursor["y"] += 1
+            if action in [Action.UP_RIGHT, Action.DOWN_RIGHT, Action.RIGHT]:
+                cursor["x"] += 1
+
+        return mask

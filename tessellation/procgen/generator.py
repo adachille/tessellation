@@ -5,6 +5,7 @@ from enum import Enum, auto
 
 import numpy as np
 
+
 # from skimage.segmentation import flood_fill
 
 
@@ -19,6 +20,9 @@ class Action(Enum):
     # DOWN_LEFT = auto()
     RIGHT = auto()
     # LEFT = auto()
+
+
+ALL_ACTIONS = [action for action in Action]
 
 
 class GenerationResult:

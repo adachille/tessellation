@@ -1,6 +1,8 @@
 """Class that defines a LEAP problem for tessellation generation."""
 
-from typing import Callable, Optional
+from __future__ import annotations
+
+from typing import Optional, Callable
 
 import numpy as np
 from leap_ec.problem import Problem
@@ -34,7 +36,7 @@ class TessellationProblem(Problem):
 
     def evaluate(self, phenome: TessellationPhenome, *args, **kwargs) -> np.array:
         """Evaluate the phenome using the heuristic functions."""
-        heuristic_vals = [heuristic_fn(phenome) for heuristic_fn in self.heuristic_fns]
+        heuristic_vals = [fn(phenome) for fn in self.heuristic_fns]
         return np.sum(self.fn_weights * heuristic_vals)
 
     def equivalent(self, first_fitness: float, second_fitness: float) -> bool:

@@ -33,8 +33,8 @@ def duplicated_points(phenome: TessellationPhenome) -> float:
 
 def out_of_bounds(phenome: TessellationPhenome, side_len: int) -> float:
     """Check that the tessellation line does not go out of bounds."""
-    max_x, max_y = side_len, side_len
-    min_x, min_y = 0, -1 * max_y
+    max_x, max_y = side_len - 1, side_len - 1
+    min_x, min_y = 0, -1 * side_len
     in_bounds = all(
         [min_x <= x <= max_x and min_y <= y <= max_y for y, x in phenome.line_indices]
     )

@@ -16,7 +16,7 @@ class TessellationGenome:
 class TessellationPhenome:
     """Class that represents a tessellation phenome."""
 
-    def __init__(self, line_indices: set[tuple[int, int]]):
+    def __init__(self, line_indices: list[tuple[int, int]]):
         self.line_indices = line_indices
 
 
@@ -46,4 +46,4 @@ class TessellationDecoder(Decoder):
                 raise ValueError(f"Unsupported action: {action}")
 
             line_indices.append((cursor["y"], cursor["x"]))
-        return TessellationPhenome(line_indices=set(line_indices))
+        return TessellationPhenome(line_indices=line_indices)

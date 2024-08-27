@@ -1,15 +1,14 @@
 from tessellation.procgen.ga.genome import TessellationPhenome
 
 
+"""Penalties"""
+
 DISQUALIFICATION_FITNESS = -100_000
 
 
-def count_number_points(phenome: TessellationPhenome) -> float:
-    """Count the number of points in the tessellation line."""
-    return len(phenome.line_indices)
-
-
-def bottom_top_even(phenome: TessellationPhenome) -> float:
+def bottom_top_not_even_penalty(
+    phenome: TessellationPhenome, max_diff_before_penalty: int
+) -> float:
     """Check that the bottom and top sides have a relatively even number of points."""
     n_top_points = 0
     n_bottom_points = 0
@@ -20,18 +19,22 @@ def bottom_top_even(phenome: TessellationPhenome) -> float:
         else:
             n_bottom_points += 1
     n_points_diff = abs(n_top_points - n_bottom_points)
-    score = -1 * n_points_diff  # We are maximizing, so we multiply by negative 1
+    if n_points_diff <= max_diff_before_penalty:
+        return 0
+
+    # We are maximizing, so we multiply by negative 1
+    score = -1 * (n_points_diff - max_diff_before_penalty)
     return score
 
 
-def duplicated_points(phenome: TessellationPhenome) -> float:
+def duplicated_points_penalty(phenome: TessellationPhenome) -> float:
     """Returns negative heuristic value for duplicated points."""
     n_line_indices = len(phenome.line_indices)
     n_unique_line_indices = len(set(phenome.line_indices))
     return n_unique_line_indices - n_line_indices
 
 
-def out_of_bounds(phenome: TessellationPhenome, side_len: int) -> float:
+def out_of_bounds_penalty(phenome: TessellationPhenome, side_len: int) -> float:
     """Check that the tessellation line does not go out of bounds."""
     max_x, max_y = side_len - 1, side_len - 1
     min_x, min_y = 0, -1 * side_len
@@ -43,11 +46,40 @@ def out_of_bounds(phenome: TessellationPhenome, side_len: int) -> float:
     return DISQUALIFICATION_FITNESS
 
 
-def is_connected(phenome: TessellationPhenome) -> float:
-    # TODO: Implement fitness function to check that the line is connected
+def stray_pixels_penalty(phenome: TessellationPhenome) -> float:
+    # TODO: Implement fitness function to check for stray pixels
     raise NotImplementedError()
 
 
-def reaches_corner_to_corner(phenome: TessellationPhenome) -> float:
+def jagged_edges_penalty(phenome: TessellationPhenome) -> float:
+    # TODO: Implement fitness function to check for jagged edges
+    raise NotImplementedError()
+
+
+"""Rewards"""
+
+
+def count_number_points_reward(phenome: TessellationPhenome) -> float:
+    """Count the number of points in the tessellation line."""
+    return len(phenome.line_indices)
+
+
+def bottom_top_even_reward(
+    phenome: TessellationPhenome, max_diff_before_penalty: int
+) -> float:
+    """Check that the bottom and top sides have a relatively even number of points."""
+    n_top_points = 0
+    n_bottom_points = 0
+    for idx in phenome.line_indices:
+        y_idx = idx[0]
+        if y_idx >= 0:
+            n_top_points += 1
+        else:
+            n_bottom_points += 1
+    n_points_diff = abs(n_top_points - n_bottom_points)
+    raise NotImplementedError
+
+
+def reaches_corner_to_corner_reward(phenome: TessellationPhenome) -> float:
     # TODO: Implement fitness function to check that the line is connected
     raise NotImplementedError()

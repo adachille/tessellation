@@ -14,18 +14,18 @@ rng = np.random.default_rng(42)
 def apply_mutation(
     mutation_fn: Callable[[Action, ...], list[Action]],
     individual_iterator: Iterator,
-    action_probs: Optional[list[float]] = None,
+    fn_kwargs: Optional[dict] = None,
 ) -> Individual:
     """Apply mutation to each individual."""
-    if action_probs is None:
-        action_probs = np.ones(len(Action)) / len(Action)
+    if fn_kwargs is None:
+        fn_kwargs = {}
 
     while True:
         individual = next(individual_iterator)
         genome = individual.genome
         new_action_list: list[Action] = []
         for idx, action in enumerate(genome.actions):
-            new_actions = mutation_fn(action, action_probs=action_probs)
+            new_actions = mutation_fn(action, **fn_kwargs)
             new_action_list.extend(new_actions)
 
         individual.fitness = None  # invalidate fitness since we have new genome

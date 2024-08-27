@@ -35,7 +35,7 @@ class TessellationProblem(Problem):
     def evaluate(self, phenome: TessellationPhenome, *args, **kwargs) -> np.array:
         """Evaluate the phenome using the heuristic functions."""
         heuristic_vals = [heuristic_fn(phenome) for heuristic_fn in self.heuristic_fns]
-        return self.fn_weights * heuristic_vals
+        return np.sum(self.fn_weights * heuristic_vals)
 
     def equivalent(self, first_fitness: float, second_fitness: float) -> bool:
         """Return True if the two fitness values are equivalent."""

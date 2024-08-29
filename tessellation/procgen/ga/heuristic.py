@@ -1,7 +1,7 @@
 from tessellation.procgen.ga.genome import TessellationPhenome
 
 
-"""Penalties"""
+"""Penalties - return negative scores"""
 
 DISQUALIFICATION_FITNESS = -100_000
 
@@ -22,9 +22,8 @@ def bottom_top_not_even_penalty(
     if n_points_diff <= max_diff_before_penalty:
         return 0
 
-    # We are maximizing, so we multiply by negative 1
-    score = -1 * (n_points_diff - max_diff_before_penalty)
-    return score
+    points_over_threshold = n_points_diff - max_diff_before_penalty
+    return -1 * points_over_threshold
 
 
 def duplicated_points_penalty(phenome: TessellationPhenome) -> float:
@@ -65,7 +64,7 @@ def count_number_points_reward(phenome: TessellationPhenome) -> float:
 
 
 def bottom_top_even_reward(
-    phenome: TessellationPhenome, max_diff_before_penalty: int
+    phenome: TessellationPhenome, max_diff_before_reward: int
 ) -> float:
     """Check that the bottom and top sides have a relatively even number of points."""
     n_top_points = 0
@@ -76,8 +75,12 @@ def bottom_top_even_reward(
             n_top_points += 1
         else:
             n_bottom_points += 1
+
     n_points_diff = abs(n_top_points - n_bottom_points)
-    raise NotImplementedError
+    if n_points_diff >= max_diff_before_reward:
+        return 0
+
+    return max_diff_before_reward - n_points_diff
 
 
 def reaches_corner_to_corner_reward(phenome: TessellationPhenome) -> float:

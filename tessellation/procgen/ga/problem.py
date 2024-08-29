@@ -1,7 +1,5 @@
 """Class that defines a LEAP problem for tessellation generation."""
 
-from __future__ import annotations
-
 from typing import Optional, Callable
 
 import numpy as np

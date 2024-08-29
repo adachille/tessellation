@@ -1,31 +1,11 @@
 """Base class for tesselation generators."""
 
 from abc import ABC
-from enum import Enum, auto
 
 import numpy as np
 
-
-class Action(Enum):
-    """Enum representing the possible actions for the generator."""
-
-    UP = auto()
-    UP_RIGHT = auto()
-    # UP_LEFT = auto()
-    DOWN = auto()
-    DOWN_RIGHT = auto()
-    # DOWN_LEFT = auto()
-    RIGHT = auto()
-    # LEFT = auto()
-
-
-ALL_ACTIONS = [action for action in Action]
-
-
-class GenerationResult:
-    def __init__(self, mask: np.ndarray, line_actions: list[list[Action]]):
-        self.mask = mask
-        self.line_actions = line_actions
+from tessellation.procgen.action import Action
+from tessellation.procgen.generation_result import GenerationResult
 
 
 class Generator(ABC):

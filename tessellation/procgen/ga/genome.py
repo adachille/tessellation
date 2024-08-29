@@ -2,7 +2,7 @@
 
 from leap_ec import Decoder
 
-from tessellation.procgen.generator import Action
+from tessellation.procgen import Action
 
 
 class TessellationGenome:

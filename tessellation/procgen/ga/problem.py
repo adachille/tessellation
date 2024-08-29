@@ -5,8 +5,8 @@ from typing import Optional, Callable
 import numpy as np
 from leap_ec.problem import Problem
 
+from tessellation.procgen import Action
 from tessellation.procgen.ga.genome import TessellationPhenome, TessellationGenome
-from tessellation.procgen.generator import Action
 
 
 class TessellationProblem(Problem):

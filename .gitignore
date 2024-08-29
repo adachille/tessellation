@@ -1,3 +1,7 @@
+# Project custom
+saved_tessellations/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

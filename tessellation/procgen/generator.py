@@ -6,9 +6,6 @@ from enum import Enum, auto
 import numpy as np
 
 
-# from skimage.segmentation import flood_fill
-
-
 class Action(Enum):
     """Enum representing the possible actions for the generator."""
 

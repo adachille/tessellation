@@ -32,3 +32,15 @@ class GenerationResult:
             "tessellation_type": self.tessellation_type.value,
             "metadata": {**self.metadata},
         }
+
+    @staticmethod
+    def read_json(file_path: Union[Path, str]):
+        """Read the generation result from a JSON file."""
+        with open(file_path, "r") as file:
+            data = json.load(file)
+
+        return GenerationResult(
+            mask=np.array(data["mask"]),
+            tessellation_type=TessellationType(data["tessellation_type"]),
+            metadata=data["metadata"],
+        )

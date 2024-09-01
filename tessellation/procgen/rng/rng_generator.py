@@ -2,6 +2,7 @@ from typing import Optional
 
 import numpy as np
 
+from tessellation.procgen import TessellationType
 from tessellation.procgen.generator import Action, Generator, GenerationResult
 
 VALID_ACTIONS = [
@@ -36,7 +37,7 @@ class RNGGenerator(Generator):
         x_axis_mask = x_axis_mask.T
         return GenerationResult(
             mask=x_axis_mask | y_axis_mask,
-            line_actions=[y_line_actions, x_line_actions],
+            tessellation_type=TessellationType.SQUARE_TRANSLATION,
         )
 
     def _generate_side(

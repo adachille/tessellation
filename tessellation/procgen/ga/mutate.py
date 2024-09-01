@@ -1,12 +1,12 @@
 """Methods for evolving tessellation genomes."""
 
-from typing import Optional, Iterator, Callable, Any
+from typing import Optional, Iterator, Callable
 
 import numpy as np
 from leap_ec import Individual
 
+from tessellation.procgen import Action, ALL_ACTIONS
 from tessellation.procgen.ga.genome import TessellationGenome
-from tessellation.procgen.generator import Action, ALL_ACTIONS
 
 rng = np.random.default_rng(42)
 

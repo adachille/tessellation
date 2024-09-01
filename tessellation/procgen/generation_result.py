@@ -28,7 +28,7 @@ class GenerationResult:
     def to_json(self) -> dict[str, Any]:
         """Return the generation result as a JSON serializable dictionary."""
         return {
-            "tessellation_type": self.tessellation_type.value,
             "mask": self.mask.tolist(),
+            "tessellation_type": self.tessellation_type.value,
             "metadata": {**self.metadata},
         }

@@ -10,7 +10,6 @@ Track the changes that have been made to the project over time.
     - Fix a bug where the drawer would not tessellate properly if the number of shapes was even.
     - Fix an off-by-1 indexing bug in `generator._draw_line`
     - Fix a bug in `generator._draw_line` where the last point would not be drawn
-    -
 - Add tests
     - Add tests for `Drawer` class
     - Add tests for `Generator` class

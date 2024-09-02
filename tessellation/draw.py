@@ -33,8 +33,9 @@ class Drawer:
         side_len_full_image = side_len * n_shapes
         tessellation = np.zeros((side_len_full_image, side_len_full_image), dtype=int)
 
-        color = 0
+        row_starting_color = 1
         for i in range(n_shapes):
+            cell_color = row_starting_color
             for j in range(n_shapes):
                 y_start = i * side_len
                 y_end = y_start + side_len
@@ -42,13 +43,15 @@ class Drawer:
                 x_start = j * side_len
                 x_end = x_start + side_len
 
-                if color == 0:
+                if cell_color == 0:
                     color_mask = np.logical_not(mask)
-                    color = 1
+                    cell_color = 1
                 else:
                     color_mask = mask
-                    color = 0
+                    cell_color = 0
 
                 tessellation[y_start:y_end, x_start:x_end] = color_mask
+
+            row_starting_color = 1 if row_starting_color == 0 else 0
 
         return tessellation

@@ -13,13 +13,13 @@ from leap_ec import Individual
 
 @pytest.fixture
 def actions():
-    return [Action.UP, Action.RIGHT]
+    yield [Action.UP, Action.RIGHT]
 
 
 @pytest.fixture
 def individual(actions):
     genome = TessellationGenome(actions, (0, 0))
-    return Individual(genome)
+    yield Individual(genome)
 
 
 def test_apply_mutation(individual):

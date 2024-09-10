@@ -11,13 +11,13 @@ from tessellation.procgen import Action
 def genome():
     actions = [Action.UP_RIGHT, Action.DOWN_RIGHT, Action.DOWN_RIGHT]
     start_point = (0, 0)
-    return TessellationGenome(actions, start_point)
+    yield TessellationGenome(actions, start_point)
 
 
 @pytest.fixture
 def phenome():
     line_indices = [(0, 0), (-1, 1), (0, 2), (1, 3)]
-    return TessellationPhenome(line_indices)
+    yield TessellationPhenome(line_indices)
 
 
 def test_tessellation_genome_init(genome):

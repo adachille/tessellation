@@ -10,10 +10,9 @@ from tessellation.procgen.ga.heuristic import (
 from tessellation.procgen.ga.genome import TessellationPhenome
 
 
-# TODO: these come from Copilot, update!!!
 @pytest.fixture
 def phenome():
-    return TessellationPhenome(line_indices=[])
+    yield TessellationPhenome(line_indices=[])
 
 
 def test_bottom_top_not_even_penalty(phenome):

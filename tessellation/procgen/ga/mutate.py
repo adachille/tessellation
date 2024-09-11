@@ -40,7 +40,7 @@ def apply_mutation(
 def substitute_action(
     existing_action: Action,
     substitution_prob: float = 0.1,
-    action_probs: list[float] = None,
+    action_probs: Optional[list[float]] = None,
 ) -> list[Action]:
     """Substitute existing action with random action with substitution_prob."""
     if action_probs is None:
@@ -55,7 +55,7 @@ def substitute_action(
 def insert_action(
     existing_action: Action,
     insertion_prob: float = 0.1,
-    action_probs: list[float] = None,
+    action_probs: Optional[list[float]] = None,
 ) -> list[Action]:
     """Insert random action with insertion_prob probability."""
     if action_probs is None:

@@ -7,14 +7,17 @@ Track the changes that have been made to the project over time.
 ### 0.0.5 (2024-09-02) - Add tests for basic tessellation generation and bug fixes
 
 - Bug fixes
-    - Fix a bug where the drawer would not tessellate properly if the number of shapes was even.
+    - Fix a bug where the drawer would not tessellate properly if the number of shapes
+      was even.
     - Fix an off-by-1 indexing bug in `generator._draw_line`
     - Fix a bug in `generator._draw_line` where the last point would not be drawn
+    - Added minor typing + `__eq__` functions to `TessellationGenome`, and
+      `TessellationPhenome`
 - Add tests
-    - Add tests for `Drawer` class
-    - Add tests for `Generator` class
-    - Add tests for `GenerationResult` class
-    - Add tests for `RNGGenerator` class
+    - Add tests for basic generation code: `Drawer` , `Generator`, `GenerationResult`,
+      `RNGGenerator`
+    - Add tests for genetic algorithm code in files: `ga_generator.py`, `genome.py`,
+      `heuristic.py`, `mutate.py`, `problem.py`
 
 ### 0.0.4 (2024-09-01) - Add functionality to genetic algorithm tesselation generation
 

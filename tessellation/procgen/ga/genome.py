@@ -12,12 +12,18 @@ class TessellationGenome:
         self.actions = actions
         self.start_point = start_point
 
+    def __eq__(self, other):
+        return self.actions == other.actions and self.start_point == other.start_point
+
 
 class TessellationPhenome:
     """Class that represents a tessellation phenome."""
 
     def __init__(self, line_indices: list[tuple[int, int]]):
         self.line_indices = line_indices
+
+    def __eq__(self, other):
+        return self.line_indices == other.line_indices
 
 
 class TessellationDecoder(Decoder):

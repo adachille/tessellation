@@ -45,3 +45,10 @@ def test_get_generation_result(generator):
     assert result.metadata["generator_class"] == "GATessellationGenerator"
     assert result.metadata["fitness"] == 10.0
     assert np.array_equal(result.mask, expected_mask)
+
+
+def test_get_generation_result_returns_none_on_index_error(generator):
+    individual = Individual(TessellationGenome([Action.RIGHT, Action.RIGHT], (0, 0)))
+    generator.side_len = 2
+    result = generator.get_generation_result(individual)
+    assert result is None

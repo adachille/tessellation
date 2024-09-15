@@ -7,15 +7,17 @@ from tessellation.procgen.tessellation_type import TessellationType
 
 @pytest.fixture
 def rng_generator():
-    return RNGGenerator(seed=42)
+    return RNGGenerator(seed=42, side_len=5)
 
 
 def test_generate(rng_generator):
-    side_len = 5
-    generation_result = rng_generator.generate(side_len)
+    generation_result = rng_generator.generate()
 
     assert isinstance(generation_result, GenerationResult)
-    assert generation_result.mask.shape == (side_len, side_len)
+    assert generation_result.mask.shape == (
+        rng_generator.side_len,
+        rng_generator.side_len,
+    )
     assert generation_result.tessellation_type == TessellationType.SQUARE_TRANSLATION
 
 

@@ -25,7 +25,10 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         python -m pylint tessellation/ --fail-under=8 --fail-on F --fail-on E --fail-on R || pylint-exit $?
-        
+        if [ $? -ne 0 ]; then
+          echo "An error occurred while running pylint." >&2
+          exit 1
+        fi
 
     - name: Run Black
       uses: psf/black@stable

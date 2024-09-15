@@ -3,7 +3,6 @@
   <component name="Black">
     <option name="enabledOnReformat" value="true" />
     <option name="enabledOnSave" value="true" />
-    <option name="pathToExecutable" value="C:\ProgramData\Anaconda3\Scripts\black.exe" />
     <option name="sdkName" value="Poetry (tessellation)" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Poetry (tessellation)" project-jdk-type="Python SDK" />

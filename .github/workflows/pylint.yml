@@ -24,7 +24,7 @@ jobs:
 
     - name: Analysing the code with pylint
       run: |
-        python -m pylint tessellation/
+        python -m pylint tessellation/ --fail-under=8 --fail-on F --fail-on E 
 
     - name: Run Black
       uses: psf/black@stable

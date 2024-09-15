@@ -62,7 +62,7 @@ class GATessellationGenerator(Generator):
                 # Crossover w/ 40% chance of swapping gen
                 # ops.UniformCrossover(p_swap=0.4), es
                 ops.evaluate,  # Evaluate fitness
-                # pylint disable=no-value-for-parameter
+                # pylint: disable=no-value-for-parameter
                 ops.pool(size=self.population_size),  # Collect offspring into new pop
                 probe.BestSoFarProbe(),  # Print best so far
             ],

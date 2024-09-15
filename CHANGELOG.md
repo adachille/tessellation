@@ -2,7 +2,18 @@
 
 Track the changes that have been made to the project over time.
 
-## Version 0.0 (2024-08-09 - ****-**-**)
+## Version 0.1 (2024-09-15 - ****-**-**)
+
+### 0.1.0 (2024-09-15) - Release of 0.1
+
+This release marks the first release of the project in which the tooling is in a
+realistically usable state. A user could run the RNGGenerator or GAGenerator and obtain
+interesting, if not fairly simple square tessellations.
+
+## Version 0.0 (2024-08-09 - 2024-09-15)
+
+In version 0.0, the project was set up with basic functionality for generating
+tessellations.
 
 ### 0.0.6 (2024-09-15) - Add pylint
 

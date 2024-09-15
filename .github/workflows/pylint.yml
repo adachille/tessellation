@@ -1,6 +1,10 @@
 name: Format and Lint Python code
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 
 jobs:
   lint:
@@ -24,11 +28,7 @@ jobs:
 
     - name: Analysing the code with pylint
       run: |
-        python -m pylint tessellation/ --fail-under=8 --fail-on F --fail-on E --fail-on R || pylint-exit $?
-        if [ $? -ne 0 ]; then
-          echo "An error occurred while running pylint." >&2
-          exit 1
-        fi
+        python -m pylint tessellation/ --fail-under=8 || pylint-exit $? --error-fail --refactor-fail
 
     - name: Run Black
       uses: psf/black@stable

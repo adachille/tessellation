@@ -1,9 +1,9 @@
-name: Format and Lint Python code
+name: Run tests on Python code
 
 on:
   push:
     branches:
-      - master
+    - master
   pull_request:
 
 jobs:
@@ -24,11 +24,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install .
-        pip install pylint
+        python -m pip install pytest coverage
 
-    - name: Analysing the code with pylint
+    - name: Test with pytest
       run: |
-        python -m pylint tessellation/ --fail-under=8 --fail-on F --fail-on E
-
-    - name: Run Black
-      uses: psf/black@stable
+        coverage run -m pytest tests/ 
+        coverage report

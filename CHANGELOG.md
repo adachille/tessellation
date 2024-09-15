@@ -4,7 +4,8 @@ Track the changes that have been made to the project over time.
 
 ## Version 0.0 (2024-08-09 - ****-**-**)
 
-### 0.0.6 (****-**-**) - Add pylint
+### 0.0.6 (2024-09-15) - Add pylint
+
 - Add pylint to the project and make updates to address pylint issues
 
 ### 0.0.5 (2024-09-02) - Add tests for basic tessellation generation and bug fixes

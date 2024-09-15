@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tessellation"
-version = "0.0.5"
+version = "0.0.6"
 description = "A service for procedurally generating tessellations."
 authors = ["Anthony D'Achille <adachille15@gmail.com>"]
 readme = "README.md"

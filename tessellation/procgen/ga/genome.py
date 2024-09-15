@@ -1,26 +1,28 @@
 """Definitions for LEAP genome/phenome primitives for tessellation generation."""
 
+import dataclasses
+
 from leap_ec import Decoder
 
 from tessellation.procgen import Action
 
 
+@dataclasses.dataclass
 class TessellationGenome:
     """Class that represents a tessellation genome."""
 
-    def __init__(self, actions: list[Action], start_point: tuple[int, int]):
-        self.actions = actions
-        self.start_point = start_point
+    actions: list[Action]
+    start_point: tuple[int, int]
 
     def __eq__(self, other):
         return self.actions == other.actions and self.start_point == other.start_point
 
 
+@dataclasses.dataclass
 class TessellationPhenome:
     """Class that represents a tessellation phenome."""
 
-    def __init__(self, line_indices: list[tuple[int, int]]):
-        self.line_indices = line_indices
+    line_indices: list[tuple[int, int]]
 
     def __eq__(self, other):
         return self.line_indices == other.line_indices

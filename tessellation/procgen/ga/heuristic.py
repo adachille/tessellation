@@ -1,7 +1,9 @@
+"""Heuristic functions for evaluating tessellation genomes."""
+
 from tessellation.procgen.ga.genome import TessellationPhenome
 
 
-"""Penalties - return negative scores"""
+### Penalties - return negative scores ###
 
 DISQUALIFICATION_FITNESS = -100_000
 
@@ -38,7 +40,7 @@ def out_of_bounds_penalty(phenome: TessellationPhenome, side_len: int) -> float:
     max_x, max_y = side_len - 1, side_len - 1
     min_x, min_y = 0, -1 * side_len
     in_bounds = all(
-        [min_x <= x <= max_x and min_y <= y <= max_y for y, x in phenome.line_indices]
+        min_x <= x <= max_x and min_y <= y <= max_y for (y, x) in phenome.line_indices
     )
     if in_bounds:
         return 0
@@ -46,16 +48,18 @@ def out_of_bounds_penalty(phenome: TessellationPhenome, side_len: int) -> float:
 
 
 def stray_pixels_penalty(phenome: TessellationPhenome) -> float:
-    # TODO: Implement fitness function to check for stray pixels
+    """Penalty for stray pixels in the tessellation line."""
+    # Implement fitness function to check for stray pixels
     raise NotImplementedError()
 
 
 def jagged_edges_penalty(phenome: TessellationPhenome) -> float:
-    # TODO: Implement fitness function to check for jagged edges
+    """Penalty for jagged edges in the tessellation line."""
+    # Implement fitness function to check for jagged edges
     raise NotImplementedError()
 
 
-"""Rewards"""
+### Rewards - return positive scores ###
 
 
 def count_number_points_reward(phenome: TessellationPhenome) -> float:
@@ -84,5 +88,6 @@ def bottom_top_even_reward(
 
 
 def reaches_corner_to_corner_reward(phenome: TessellationPhenome) -> float:
-    # TODO: Implement fitness function to check that the line is connected
+    """Reward for tessellation line that reaches from corner to corner of mask."""
+    # Implement fitness function to check that the line is connected
     raise NotImplementedError()

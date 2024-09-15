@@ -24,7 +24,7 @@ def apply_mutation(
         individual = next(individual_iterator)
         genome = individual.genome
         new_action_list: list[Action] = []
-        for idx, action in enumerate(genome.actions):
+        for action in genome.actions:
             new_actions = mutation_fn(action, **fn_kwargs)
             new_action_list.extend(new_actions)
 
@@ -48,8 +48,7 @@ def substitute_action(
 
     if rng.random() < substitution_prob:
         return [rng.choice(np.array(ALL_ACTIONS), p=action_probs)]
-    else:
-        return [existing_action]
+    return [existing_action]
 
 
 def insert_action(
@@ -65,8 +64,7 @@ def insert_action(
         new_action = rng.choice(np.array(ALL_ACTIONS), p=action_probs)
         if rng.random() < 0.5:
             return [existing_action, new_action]
-        else:
-            return [new_action, existing_action]
+        return [new_action, existing_action]
     return [existing_action]
 
 

@@ -1,3 +1,5 @@
+"""Enum representing the possible actions for the generator."""
+
 from enum import Enum, auto
 
 
@@ -14,4 +16,4 @@ class Action(Enum):
     # LEFT = auto()
 
 
-ALL_ACTIONS = [action for action in Action]
+ALL_ACTIONS = list(Action)

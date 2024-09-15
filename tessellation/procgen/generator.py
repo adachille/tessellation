@@ -11,7 +11,7 @@ from tessellation.procgen.generation_result import GenerationResult
 class Generator(ABC):
     """Base class for tesselation generators."""
 
-    def generate(self, *args, **kwargs) -> GenerationResult:
+    def generate(self) -> GenerationResult:
         """Generate a new tesselation."""
         raise NotImplementedError
 

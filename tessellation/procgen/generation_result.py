@@ -10,6 +10,8 @@ from tessellation.procgen.tessellation_type import TessellationType
 
 
 class GenerationResult:
+    """Class representing the result of a tesselation generation."""
+
     def __init__(
         self,
         mask: np.ndarray,
@@ -22,7 +24,7 @@ class GenerationResult:
 
     def save_as_json(self, file_path: Union[Path, str]):
         """Save the generation result as a JSON file."""
-        with open(file_path, "w") as file:
+        with open(file_path, "w", encoding="utf-8") as file:
             json.dump(self.to_json(), file, indent=2)
 
     def to_json(self) -> dict[str, Any]:
@@ -36,7 +38,7 @@ class GenerationResult:
     @staticmethod
     def read_json(file_path: Union[Path, str]):
         """Read the generation result from a JSON file."""
-        with open(file_path, "r") as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             data = json.load(file)
 
         return GenerationResult(

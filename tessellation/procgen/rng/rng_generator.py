@@ -1,3 +1,5 @@
+"""Random number generator based tessellation mask generator."""
+
 from typing import Optional
 
 import numpy as np
@@ -17,12 +19,12 @@ VALID_ACTIONS = [
 class RNGGenerator(Generator):
     """Generator that uses a random number generator to generate the tesselation mask."""
 
-    def __init__(self, seed: int = 42):
+    def __init__(self, seed: int = 42, side_len: int = 100):
         self.rng = np.random.default_rng(seed)
+        self.side_len = side_len
 
     def generate(
         self,
-        side_len: int,
         action_probs: Optional[list[Action]] = None,
     ) -> GenerationResult:
         """Generate a tesselation mask using a random number generator."""
@@ -31,8 +33,8 @@ class RNGGenerator(Generator):
 
         assert len(VALID_ACTIONS) == len(action_probs)
 
-        y_axis_mask, y_line_actions = self._generate_side(side_len, action_probs)
-        x_axis_mask, x_line_actions = self._generate_side(side_len, action_probs)
+        y_axis_mask, _ = self._generate_side(self.side_len, action_probs)
+        x_axis_mask, _ = self._generate_side(self.side_len, action_probs)
         # Transpose the x_mask to make the line run along the x-axis
         x_axis_mask = x_axis_mask.T
         return GenerationResult(

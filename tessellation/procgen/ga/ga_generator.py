@@ -40,6 +40,13 @@ class GATessellationGenerator(Generator):
 
         self.population = None
 
+    def generate(self, individual_idx: int = 0) -> GenerationResult:
+        """Generate a new tesselation."""
+        if self.population is None:
+            self.evolve()
+
+        return self.get_generation_result(self.population[individual_idx])
+
     def evolve(self) -> list[GenerationResult]:
         """Run genetic algorithm and evolve the population."""
         self.population = generational_ea(
@@ -55,6 +62,7 @@ class GATessellationGenerator(Generator):
                 # Crossover w/ 40% chance of swapping gen
                 # ops.UniformCrossover(p_swap=0.4), es
                 ops.evaluate,  # Evaluate fitness
+                # pylint disable=no-value-for-parameter
                 ops.pool(size=self.population_size),  # Collect offspring into new pop
                 probe.BestSoFarProbe(),  # Print best so far
             ],
@@ -63,14 +71,16 @@ class GATessellationGenerator(Generator):
             self.get_generation_result(individual) for individual in self.population
         ]
 
-    def get_generation_result(self, individual: Individual):
+    def get_generation_result(
+        self, individual: Individual
+    ) -> Optional[GenerationResult]:
         """Return the generation result for the individual."""
         genome = individual.genome
         mask = np.zeros((self.side_len, self.side_len), dtype=int)
         try:
             mask = Generator._draw_line(mask, genome.start_point, genome.actions)
-            mask_T = Generator._draw_line(mask.T, genome.start_point, genome.actions)
-            final_mask = mask | mask_T
+            mask_t = Generator._draw_line(mask.T, genome.start_point, genome.actions)
+            final_mask = mask | mask_t
 
             return GenerationResult(
                 final_mask,
@@ -82,3 +92,4 @@ class GATessellationGenerator(Generator):
             )
         except IndexError:
             print(f"Invalid individual: {individual}, returning None")
+            return None

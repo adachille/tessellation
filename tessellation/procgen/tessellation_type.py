@@ -1,3 +1,5 @@
+"""Enum representing the possible tesselation types."""
+
 from enum import Enum
 
 

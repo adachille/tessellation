@@ -9,6 +9,7 @@ from leap_ec.algorithm import generational_ea
 from tessellation.procgen import Generator, GenerationResult, Action, TessellationType
 from tessellation.procgen.ga.genome import TessellationPhenome, TessellationDecoder
 from tessellation.procgen.ga.problem import TessellationProblem, initialize_genome
+from tessellation.procgen.generator import Point
 
 
 class GATessellationGenerator(Generator):
@@ -78,8 +79,12 @@ class GATessellationGenerator(Generator):
         genome = individual.genome
         mask = np.zeros((self.side_len, self.side_len), dtype=int)
         try:
-            mask = Generator._draw_line(mask, genome.start_point, genome.actions)
-            mask_t = Generator._draw_line(mask.T, genome.start_point, genome.actions)
+            mask = self._draw_line(
+                mask, genome.start_point, genome.actions, genome.end_point
+            )
+            mask_t = self._draw_line(
+                mask.T, genome.start_point, genome.actions, genome.end_point
+            )
             final_mask = mask | mask_t
 
             return GenerationResult(
@@ -93,3 +98,31 @@ class GATessellationGenerator(Generator):
         except IndexError:
             print(f"Invalid individual: {individual}, returning None")
             return None
+
+    def _draw_line(
+        self,
+        mask: np.ndarray,
+        start_point: Point,
+        action_list: list[Action],
+        end_point: Optional[Point] = None,
+    ) -> np.ndarray:
+        """Draw a line on the mask."""
+        if end_point is None:
+            end_point = Point(x=mask.shape[1] - 1, y=0)
+        self._draw_point_column(mask, start_point)
+
+        cur_point = start_point
+        for action in action_list:
+            new_x, new_y = cur_point.x, cur_point.y
+            if action in [Action.UP_RIGHT, Action.UP]:
+                new_y -= 1
+            if action in [Action.DOWN_RIGHT, Action.DOWN]:
+                new_y += 1
+            if action in [Action.UP_RIGHT, Action.DOWN_RIGHT, Action.RIGHT]:
+                new_x += 1
+            cur_point = Point(x=new_x, y=new_y)
+            self._draw_point_column(mask, cur_point)
+
+        self._draw_point_column(mask, end_point)
+
+        return mask

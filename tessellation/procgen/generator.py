@@ -38,8 +38,8 @@ class Generator(ABC):
         """Generate a new tesselation."""
         raise NotImplementedError
 
-    @staticmethod
     def _draw_line(
+        self,
         mask: np.ndarray,
         start_point: Union[tuple[int, int], Point],
         action_list: list[Action],
@@ -48,19 +48,26 @@ class Generator(ABC):
         if isinstance(start_point, tuple):
             start_point = Point(x=start_point[0], y=start_point[1])
 
-        cursor = {"x": start_point.x, "y": start_point.y}
-        mask[cursor["y"], cursor["x"]] = 1
-        for action in action_list:
-            if action in [Action.UP_RIGHT, Action.UP]:
-                cursor["y"] -= 1
-            if action in [Action.DOWN_RIGHT, Action.DOWN]:
-                cursor["y"] += 1
-            if action in [Action.UP_RIGHT, Action.DOWN_RIGHT, Action.RIGHT]:
-                cursor["x"] += 1
+        self._draw_point_column(mask, start_point)
 
-            if cursor["y"] >= 0:
-                mask[0 : cursor["y"] + 1, cursor["x"]] = 1
-            else:
-                mask[cursor["y"] :, cursor["x"]] = 1
+        cur_point = start_point
+        for action in action_list:
+            new_x, new_y = cur_point.x, cur_point.y
+            if action in [Action.UP_RIGHT, Action.UP]:
+                new_y -= 1
+            if action in [Action.DOWN_RIGHT, Action.DOWN]:
+                new_y += 1
+            if action in [Action.UP_RIGHT, Action.DOWN_RIGHT, Action.RIGHT]:
+                new_x += 1
+            cur_point = Point(x=new_x, y=new_y)
+            self._draw_point_column(mask, cur_point)
 
         return mask
+
+    @staticmethod
+    def _draw_point_column(mask: np.ndarray, point: Point):
+        """Draw a point in the mask and fill in vertical space between the point and 0."""
+        if point.y >= 0:
+            mask[0 : point.y + 1, point.x] = 1
+        else:
+            mask[point.y :, point.x] = 1

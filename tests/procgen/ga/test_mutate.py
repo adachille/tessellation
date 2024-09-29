@@ -20,7 +20,7 @@ def actions():
 
 @pytest.fixture
 def individual(actions):
-    genome = TessellationGenome(actions, Point(0, 0))
+    genome = TessellationGenome(actions, Point(0, 0), Point(3, 0))
     yield Individual(genome)
 
 

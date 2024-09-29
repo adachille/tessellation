@@ -5,6 +5,8 @@ from tessellation.procgen.ga.genome import TessellationGenome
 from tessellation.procgen import Action, GenerationResult, TessellationType
 from leap_ec import Individual
 
+from tessellation.procgen.generator import Point
+
 
 @pytest.fixture
 def heuristic_fns():
@@ -36,7 +38,9 @@ def test_ga_tessellation_generator_init(generator, heuristic_fns, mutation_fns):
 
 
 def test_get_generation_result(generator):
-    individual = Individual(TessellationGenome([Action.UP, Action.RIGHT], (0, 0)))
+    individual = Individual(
+        TessellationGenome([Action.UP, Action.RIGHT], Point(0, 0), Point(3, 0))
+    )
     individual.fitness = 10.0
     expected_mask = np.array([[1, 0, 0, 1], [0, 0, 0, 1], [0, 0, 0, 0], [1, 1, 0, 0]])
     result = generator.get_generation_result(individual)
@@ -48,7 +52,11 @@ def test_get_generation_result(generator):
 
 
 def test_get_generation_result_returns_none_on_index_error(generator):
-    individual = Individual(TessellationGenome([Action.RIGHT, Action.RIGHT], (0, 0)))
+    individual = Individual(
+        TessellationGenome(
+            [Action.RIGHT, Action.RIGHT], Point(0, 0), end_point=Point(1, 0)
+        )
+    )
     generator.side_len = 2
     result = generator.get_generation_result(individual)
     assert result is None

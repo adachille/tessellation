@@ -20,7 +20,7 @@ def test_generate_not_implemented(generator):
         generator.generate()
 
 
-def test_draw_line():
+def test_draw_line(generator):
     mask = np.zeros((5, 5), dtype=int)
     start_point = (0, 0)
     action_list = [
@@ -41,5 +41,5 @@ def test_draw_line():
         ]
     )
 
-    result_mask = Generator._draw_line(mask, start_point, action_list)
+    result_mask = generator._draw_line(mask, start_point, action_list)
     np.testing.assert_array_equal(result_mask, expected_mask)

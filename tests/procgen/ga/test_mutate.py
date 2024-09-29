@@ -10,6 +10,8 @@ from tessellation.procgen import Action, ALL_ACTIONS
 from tessellation.procgen.ga.genome import TessellationGenome
 from leap_ec import Individual
 
+from tessellation.procgen.generator import Point
+
 
 @pytest.fixture
 def actions():
@@ -18,7 +20,7 @@ def actions():
 
 @pytest.fixture
 def individual(actions):
-    genome = TessellationGenome(actions, (0, 0))
+    genome = TessellationGenome(actions, Point(0, 0))
     yield Individual(genome)
 
 

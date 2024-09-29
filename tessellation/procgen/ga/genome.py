@@ -5,6 +5,7 @@ import dataclasses
 from leap_ec import Decoder
 
 from tessellation.procgen import Action
+from tessellation.procgen.generator import Point
 
 
 @dataclasses.dataclass
@@ -12,17 +13,22 @@ class TessellationGenome:
     """Class that represents a tessellation genome."""
 
     actions: list[Action]
-    start_point: tuple[int, int]
+    start_point: Point
 
     def __eq__(self, other):
-        return self.actions == other.actions and self.start_point == other.start_point
+        return all(
+            [
+                self.actions == other.actions,
+                self.start_point == other.start_point,
+            ]
+        )
 
 
 @dataclasses.dataclass
 class TessellationPhenome:
     """Class that represents a tessellation phenome."""
 
-    line_indices: list[tuple[int, int]]
+    line_indices: list[Point]
 
     def __eq__(self, other):
         return self.line_indices == other.line_indices
@@ -35,8 +41,8 @@ class TessellationDecoder(Decoder):
         self, genome: TessellationGenome, *args, **kwargs
     ) -> TessellationPhenome:
         """Decode a genome into a phenome."""
-        cursor = {"y": genome.start_point[0], "x": genome.start_point[1]}
-        line_indices = [(cursor["y"], cursor["x"])]
+        cursor = {"x": genome.start_point.x, "y": genome.start_point.y}
+        line_indices = [Point(x=genome.start_point.x, y=genome.start_point.y)]
         for action in genome.actions:
             if action == Action.UP:
                 cursor["y"] -= 1
@@ -53,5 +59,5 @@ class TessellationDecoder(Decoder):
             else:
                 raise ValueError(f"Unsupported action: {action}")
 
-            line_indices.append((cursor["y"], cursor["x"]))
+            line_indices.append(Point(x=cursor["x"], y=cursor["y"]))
         return TessellationPhenome(line_indices=line_indices)

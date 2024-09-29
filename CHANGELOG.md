@@ -4,6 +4,12 @@ Track the changes that have been made to the project over time.
 
 ## Version 0.1 (2024-09-15 - ****-**-**)
 
+### 0.1.1 (2024-09-29) - Refactor to use Point dataclass
+
+- Refactor code to use a `Point` dataclass rather than a tuple of ints
+- Fix a minor bug in the `00_rng_tessellation.ipynb` where we were passing in `side_len`
+  as an arg to the `generate` method rather than in the class `init` method.
+
 ### 0.1.0 (2024-09-15) - Release of 0.1
 
 This release marks the first release of the project in which the tooling is in a

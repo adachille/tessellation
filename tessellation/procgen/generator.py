@@ -1,11 +1,34 @@
 """Base class for tesselation generators."""
 
+import dataclasses
 from abc import ABC
+from typing import Union
 
 import numpy as np
 
 from tessellation.procgen.action import Action
 from tessellation.procgen.generation_result import GenerationResult
+
+
+@dataclasses.dataclass
+class Point:
+    """Class that represents a point on a tessellation line."""
+
+    x: int
+    y: int
+
+    def __init__(self, x: int, y: int):
+        self.x = x
+        self.y = y
+
+    def __hash__(self):
+        return hash((self.x, self.y))
+
+    def __eq__(self, other):
+        if isinstance(other, tuple):
+            return self.x == other[0] and self.y == other[1]
+
+        return self.x == other.x and self.y == other.y
 
 
 class Generator(ABC):
@@ -18,11 +41,14 @@ class Generator(ABC):
     @staticmethod
     def _draw_line(
         mask: np.ndarray,
-        start_point: tuple[int, int],  # (y, x)
+        start_point: Union[tuple[int, int], Point],
         action_list: list[Action],
     ) -> np.ndarray:
         """Draw a line on the mask."""
-        cursor = {"x": start_point[1], "y": start_point[0]}
+        if isinstance(start_point, tuple):
+            start_point = Point(x=start_point[0], y=start_point[1])
+
+        cursor = {"x": start_point.x, "y": start_point.y}
         mask[cursor["y"], cursor["x"]] = 1
         for action in action_list:
             if action in [Action.UP_RIGHT, Action.UP]:

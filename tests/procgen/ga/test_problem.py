@@ -2,25 +2,27 @@ import pytest
 from tessellation.procgen.ga.genome import TessellationGenome, TessellationPhenome
 from tessellation.procgen import Action
 from tessellation.procgen.ga.problem import TessellationProblem, initialize_genome
+from tessellation.procgen.generator import Point
 
 
 @pytest.fixture
 def genome():
     actions = [Action.UP_RIGHT, Action.DOWN_RIGHT, Action.DOWN_RIGHT]
-    start_point = (0, 0)
+    start_point = Point(0, 0)
     yield TessellationGenome(actions, start_point)
 
 
 @pytest.fixture
 def phenome():
-    yield TessellationPhenome(line_indices=[(0, 0), (-1, 1), (0, 2), (1, 4)])
+    line_indices = [Point(x=x, y=y) for x, y in [(0, 0), (1, -1), (2, 0), (4, 1)]]
+    yield TessellationPhenome(line_indices=line_indices)
 
 
 @pytest.fixture
 def population():
     yield [
-        TessellationGenome([Action.UP, Action.RIGHT], (0, 0)),
-        TessellationGenome([Action.DOWN, Action.LEFT], (1, 1)),
+        TessellationGenome([Action.UP, Action.RIGHT], Point(0, 0)),
+        TessellationGenome([Action.DOWN, Action.LEFT], Point(1, 1)),
     ]
 
 
@@ -50,6 +52,6 @@ def test_worse_than(problem):
 
 def test_initialize_genome(problem):
     initialized_genome = initialize_genome(problem)
-    assert initialized_genome.start_point == (0, 0)
+    assert initialized_genome.start_point == Point(0, 0)
     assert all(action in Action for action in initialized_genome.actions)
     assert len(initialized_genome.actions) == problem.side_len

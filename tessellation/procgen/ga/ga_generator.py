@@ -21,17 +21,14 @@ class GATessellationGenerator(Generator):
         mutation_fns: list[Callable[[Action, ...], list[Action]]],
         heuristic_fn_weights: Optional[list[float]] = None,
         side_len: int = 100,
-        use_endpoint: bool = True,
         max_generations: int = 100,
         population_size: int = 100,
     ):
         self.side_len = side_len
-        self.use_endpoint = use_endpoint
         self.problem = TessellationProblem(
             heuristic_fns=heuristic_fns,
             fn_weights=heuristic_fn_weights,
             side_len=self.side_len,
-            use_endpoint=self.use_endpoint,
         )
         self.representation = Representation(
             decoder=TessellationDecoder(),

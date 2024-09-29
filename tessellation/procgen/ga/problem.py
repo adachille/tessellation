@@ -18,7 +18,6 @@ class TessellationProblem(Problem):
         heuristic_fns: list[Callable[[TessellationPhenome], float]],
         fn_weights: Optional[list[float]] = None,
         side_len: int = 100,
-        use_endpoint: bool = True,
     ):
         super().__init__()
         self.heuristic_fns = heuristic_fns
@@ -33,7 +32,6 @@ class TessellationProblem(Problem):
             self.fn_weights = np.array(fn_weights)
 
         self.side_len = side_len
-        self.use_endpoint = use_endpoint
 
     def evaluate(self, phenome: TessellationPhenome, *args, **kwargs) -> np.array:
         """Evaluate the phenome using the heuristic functions."""
@@ -55,5 +53,5 @@ def initialize_genome(problem: TessellationProblem):
     return TessellationGenome(
         actions=actions,
         start_point=Point(0, 0),
-        end_point=Point(problem.side_len - 1, 0) if problem.use_endpoint else None,
+        end_point=Point(problem.side_len - 1, 0),
     )

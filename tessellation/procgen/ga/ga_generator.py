@@ -21,14 +21,17 @@ class GATessellationGenerator(Generator):
         mutation_fns: list[Callable[[Action, ...], list[Action]]],
         heuristic_fn_weights: Optional[list[float]] = None,
         side_len: int = 100,
+        use_endpoint: bool = True,
         max_generations: int = 100,
         population_size: int = 100,
     ):
         self.side_len = side_len
+        self.use_endpoint = use_endpoint
         self.problem = TessellationProblem(
             heuristic_fns=heuristic_fns,
             fn_weights=heuristic_fn_weights,
             side_len=self.side_len,
+            use_endpoint=self.use_endpoint,
         )
         self.representation = Representation(
             decoder=TessellationDecoder(),
@@ -79,8 +82,12 @@ class GATessellationGenerator(Generator):
         genome = individual.genome
         mask = np.zeros((self.side_len, self.side_len), dtype=int)
         try:
-            mask = Generator._draw_line(mask, genome.start_point, genome.actions)
-            mask_t = Generator._draw_line(mask.T, genome.start_point, genome.actions)
+            mask = self._draw_line(
+                mask, genome.start_point, genome.actions, genome.end_point
+            )
+            mask_t = self._draw_line(
+                mask.T, genome.start_point, genome.actions, genome.end_point
+            )
             final_mask = mask | mask_t
 
             return GenerationResult(
@@ -98,11 +105,13 @@ class GATessellationGenerator(Generator):
     def _draw_line(
         self,
         mask: np.ndarray,
-        action_list: list[Action],
         start_point: Point,
+        action_list: list[Action],
         end_point: Optional[Point] = None,
     ) -> np.ndarray:
         """Draw a line on the mask."""
+        if end_point is None:
+            end_point = Point(x=mask.shape[1] - 1, y=0)
         self._draw_point_column(mask, start_point)
 
         cur_point = start_point
@@ -120,11 +129,3 @@ class GATessellationGenerator(Generator):
         self._draw_point_column(mask, end_point)
 
         return mask
-
-    @staticmethod
-    def _draw_point_column(mask: np.ndarray, point: Point):
-        """Draw a point in the mask and fill in vertical space between the point and 0."""
-        if point.y >= 0:
-            mask[0 : point.y + 1, point.x] = 1
-        else:
-            mask[point.y :, point.x] = 1

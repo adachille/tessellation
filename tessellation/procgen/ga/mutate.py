@@ -31,10 +31,15 @@ def apply_mutation(
         individual.fitness = None  # invalidate fitness since we have new genome
 
         individual.genome = TessellationGenome(
-            actions=new_action_list, start_point=genome.start_point
+            actions=new_action_list,
+            start_point=genome.start_point,
+            end_point=genome.end_point,
         )
 
         yield individual
+
+
+# TODO: Add mutation funcs for start/end point
 
 
 def substitute_action(

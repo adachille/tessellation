@@ -49,5 +49,9 @@ class TessellationProblem(Problem):
 
 def initialize_genome(problem: TessellationProblem):
     """Initialize a genome for the tessellation problem."""
-    actions = [Action.RIGHT for _ in range(problem.side_len)]
-    return TessellationGenome(actions=actions, start_point=Point(0, 0))
+    actions = [Action.RIGHT for _ in range(problem.side_len - 1)]
+    return TessellationGenome(
+        actions=actions,
+        start_point=Point(0, 0),
+        end_point=Point(problem.side_len - 1, 0),
+    )

@@ -9,6 +9,7 @@ from leap_ec.algorithm import generational_ea
 from tessellation.procgen import Generator, GenerationResult, Action, TessellationType
 from tessellation.procgen.ga.genome import TessellationPhenome, TessellationDecoder
 from tessellation.procgen.ga.problem import TessellationProblem, initialize_genome
+from tessellation.procgen.generator import Point
 
 
 class GATessellationGenerator(Generator):
@@ -93,3 +94,37 @@ class GATessellationGenerator(Generator):
         except IndexError:
             print(f"Invalid individual: {individual}, returning None")
             return None
+
+    def _draw_line(
+        self,
+        mask: np.ndarray,
+        action_list: list[Action],
+        start_point: Point,
+        end_point: Optional[Point] = None,
+    ) -> np.ndarray:
+        """Draw a line on the mask."""
+        self._draw_point_column(mask, start_point)
+
+        cur_point = start_point
+        for action in action_list:
+            new_x, new_y = cur_point.x, cur_point.y
+            if action in [Action.UP_RIGHT, Action.UP]:
+                new_y -= 1
+            if action in [Action.DOWN_RIGHT, Action.DOWN]:
+                new_y += 1
+            if action in [Action.UP_RIGHT, Action.DOWN_RIGHT, Action.RIGHT]:
+                new_x += 1
+            cur_point = Point(x=new_x, y=new_y)
+            self._draw_point_column(mask, cur_point)
+
+        self._draw_point_column(mask, end_point)
+
+        return mask
+
+    @staticmethod
+    def _draw_point_column(mask: np.ndarray, point: Point):
+        """Draw a point in the mask and fill in vertical space between the point and 0."""
+        if point.y >= 0:
+            mask[0 : point.y + 1, point.x] = 1
+        else:
+            mask[point.y :, point.x] = 1

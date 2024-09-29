@@ -19,7 +19,11 @@ VALID_ACTIONS = [
 class RNGGenerator(Generator):
     """Generator that uses a random number generator to generate the tesselation mask."""
 
-    def __init__(self, seed: int = 42, side_len: int = 100):
+    def __init__(
+        self,
+        side_len: int = 100,
+        seed: int = 42,
+    ):
         self.rng = np.random.default_rng(seed)
         self.side_len = side_len
 

@@ -14,9 +14,8 @@ def bottom_top_not_even_penalty(
     """Check that the bottom and top sides have a relatively even number of points."""
     n_top_points = 0
     n_bottom_points = 0
-    for idx in phenome.line_indices:
-        y_idx = idx[0]
-        if y_idx >= 0:
+    for point in phenome.line_indices:
+        if point.y >= 0:
             n_top_points += 1
         else:
             n_bottom_points += 1
@@ -40,7 +39,8 @@ def out_of_bounds_penalty(phenome: TessellationPhenome, side_len: int) -> float:
     max_x, max_y = side_len - 1, side_len - 1
     min_x, min_y = 0, -1 * side_len
     in_bounds = all(
-        min_x <= x <= max_x and min_y <= y <= max_y for (y, x) in phenome.line_indices
+        min_x <= point.x <= max_x and min_y <= point.y <= max_y
+        for point in phenome.line_indices
     )
     if in_bounds:
         return 0
@@ -73,9 +73,8 @@ def bottom_top_even_reward(
     """Check that the bottom and top sides have a relatively even number of points."""
     n_top_points = 0
     n_bottom_points = 0
-    for idx in phenome.line_indices:
-        y_idx = idx[0]
-        if y_idx >= 0:
+    for point in phenome.line_indices:
+        if point.y >= 0:
             n_top_points += 1
         else:
             n_bottom_points += 1

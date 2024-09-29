@@ -7,6 +7,7 @@ from leap_ec.problem import Problem
 
 from tessellation.procgen import Action
 from tessellation.procgen.ga.genome import TessellationPhenome, TessellationGenome
+from tessellation.procgen.generator import Point
 
 
 class TessellationProblem(Problem):
@@ -49,4 +50,4 @@ class TessellationProblem(Problem):
 def initialize_genome(problem: TessellationProblem):
     """Initialize a genome for the tessellation problem."""
     actions = [Action.RIGHT for _ in range(problem.side_len)]
-    return TessellationGenome(actions=actions, start_point=(0, 0))
+    return TessellationGenome(actions=actions, start_point=Point(0, 0))

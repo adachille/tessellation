@@ -14,14 +14,12 @@ class TessellationGenome:
 
     actions: list[Action]
     start_point: Point
-    # end_point: tuple[int, int]
 
     def __eq__(self, other):
         return all(
             [
                 self.actions == other.actions,
                 self.start_point == other.start_point,
-                # self.end_point == self.end_point,
             ]
         )
 
@@ -62,5 +60,4 @@ class TessellationDecoder(Decoder):
                 raise ValueError(f"Unsupported action: {action}")
 
             line_indices.append(Point(x=cursor["x"], y=cursor["y"]))
-        # line_indices.append(genome.end_point[0], genome.end_point[1])
         return TessellationPhenome(line_indices=line_indices)
